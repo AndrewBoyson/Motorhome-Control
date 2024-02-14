@@ -6,8 +6,6 @@
 #include "dplus.h"
 #include "water.h"
 
-#define BASE_MS 1000
-
 static void receive(uint16_t id, uint8_t length, void* pData)
 {
     switch(id)
@@ -32,6 +30,7 @@ void CanThisInit(void)
 }
 void CanThisMain(void)
 {
+    /*
     static uint32_t msTimerWaterPump       = 0;
     static uint32_t msTimerWaterFill       = 0;
     static uint32_t msTimerWaterDrain      = 0;
@@ -67,4 +66,14 @@ void CanThisMain(void)
     if (sendPumpMinLitres  ) { int16_t value = ControlGetPumpMinLitres  (); sendPumpMinLitres   = CanTransmit(CAN_ID_CONTROL + CAN_ID_PUMP_MIN_LITRES  , sizeof(value), &value); }
     if (sendPumpDplusLitres) { int16_t value = ControlGetPumpDplusLitres(); sendPumpDplusLitres = CanTransmit(CAN_ID_CONTROL + CAN_ID_PUMP_DPLUS_LITRES, sizeof(value), &value); }
     if (sendDrainMaxLitres ) { int16_t value = ControlGetDrainMaxLitres (); sendDrainMaxLitres  = CanTransmit(CAN_ID_CONTROL + CAN_ID_DRAIN_MAX_LITRES , sizeof(value), &value); }
+    */
+    
+    {  char    value = ControlGetPump           (); static struct CanTransmitState state; CanTransmitOnChange(&state, CAN_ID_CONTROL, CAN_ID_PUMP             , sizeof(value), &value); }
+    {  char    value = ControlGetFill           (); static struct CanTransmitState state; CanTransmitOnChange(&state, CAN_ID_CONTROL, CAN_ID_FILL             , sizeof(value), &value); }
+    {  char    value = ControlGetDrain          (); static struct CanTransmitState state; CanTransmitOnChange(&state, CAN_ID_CONTROL, CAN_ID_DRAIN            , sizeof(value), &value); }
+    {  char    value = ControlGetInverter       (); static struct CanTransmitState state; CanTransmitOnChange(&state, CAN_ID_CONTROL, CAN_ID_INVERTER         , sizeof(value), &value); }
+    {  char    value = Dplus                      ; static struct CanTransmitState state; CanTransmitOnChange(&state, CAN_ID_CONTROL, CAN_ID_D_PLUS           , sizeof(value), &value); }
+    {  int16_t value = ControlGetPumpMinLitres  (); static struct CanTransmitState state; CanTransmitOnChange(&state, CAN_ID_CONTROL, CAN_ID_PUMP_MIN_LITRES  , sizeof(value), &value); }
+    {  int16_t value = ControlGetPumpDplusLitres(); static struct CanTransmitState state; CanTransmitOnChange(&state, CAN_ID_CONTROL, CAN_ID_PUMP_DPLUS_LITRES, sizeof(value), &value); }
+    {  int16_t value = ControlGetDrainMaxLitres (); static struct CanTransmitState state; CanTransmitOnChange(&state, CAN_ID_CONTROL, CAN_ID_DRAIN_MAX_LITRES , sizeof(value), &value); }
 }
