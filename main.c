@@ -9,6 +9,7 @@
 #include "led.h"
 #include "pb.h"
 #include "dplus.h"
+#include "ehu.h"
 #include "control.h"
 
 #define _XTAL_FREQ 8000000
@@ -20,6 +21,7 @@ void __interrupt() isr(void)
         MsTimerTickHandler();
         PbTickHandler();
         DplusTickHandler();
+        EhuTickHandler();
         MsTickerHandleInterrupt();
     }
 }
@@ -33,6 +35,7 @@ void main()
     LedInit();
     PbInit();
     DplusInit();
+    EhuInit();
     ControlInit();
     ei();
     PEIE = 1; //Enable peripheral interrupts - specifically Timer 1 and ADC

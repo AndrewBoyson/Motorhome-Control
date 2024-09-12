@@ -1,4 +1,4 @@
-extern void DplusTickHandler(void);
-extern void DplusInit(void);
+extern void EhuTickHandler(void);
+extern void EhuInit(void);
 
-extern char Dplus;
+extern char Ehu;

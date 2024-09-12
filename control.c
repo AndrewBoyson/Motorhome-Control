@@ -7,6 +7,7 @@
 #include "led.h"
 #include "pb.h"
 #include "dplus.h"
+#include "ehu.h"
 #include "water.h"
 
 static char    _pump            = 0;
@@ -93,9 +94,9 @@ void ControlMain()
     Led3Set(_drain   );
     Led4Set(_inverter);
     
-    Relay1Set(_pump    );
-    Relay2Set(_fill    );
-    Relay3Set(_drain   );
-    Relay7Set(_inverter);
-    Relay8Set(_inverter);
+    Relay1Set(_pump       );
+    Relay2Set(_fill       );
+    Relay3Set(_drain      );
+    Relay7Set(Dplus && Ehu); //Alarm
+    Relay8Set(_inverter   );
 }

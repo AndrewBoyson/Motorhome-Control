@@ -1,25 +1,38 @@
 #include <xc.h>
 #include <stdint.h>
 
-#define BIT0     RA0
-#define TRI0     TRISA0
+#define BIT0     RA6
+#define TRI0     TRISA6
 
-#define DEBOUNCE_MS  50
+#define SAMPLE_SIZE  100
+#define MAX_GLITCHES_PER_SAMPLE 2
 
-char Dplus = 0;
+char Ehu = 0;
 
-void DplusInit()
+void EhuInit()
 {
-    ANSEL0 = 0; //Set pin to be RA0 rather than AN0
     TRI0 = 1;
 }
 
-void DplusTickHandler()
-{
-    static int8_t debounceMs0 = 0;
+/*
+ Over 10ms
+ ehu off - input is true all the time               > 99%
+ ehu on  - input is true for 2ms and false for 8ms  < 20%
+ Sample over 100ms - ehu = count < 99 
+*/
 
-    if ( BIT0 && debounceMs0 <  DEBOUNCE_MS) debounceMs0++;
-    if (!BIT0 && debounceMs0 >            0) debounceMs0--;
-    if (         debounceMs0 == 0          ) Dplus = 0;
-    if (         debounceMs0 == DEBOUNCE_MS) Dplus = 1;
+void EhuTickHandler()
+{
+    static uint8_t ms = 0;
+    static uint8_t count = 0;
+    
+    if (BIT0) count++;
+    
+    ms++;
+    if (ms >= SAMPLE_SIZE)
+    {
+        Ehu = count <= (SAMPLE_SIZE - MAX_GLITCHES_PER_SAMPLE);
+        ms = 0;
+        count = 0;
+    }
 }
